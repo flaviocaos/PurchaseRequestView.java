@@ -46,10 +46,9 @@ public class PurchaseRequestView extends AbstractActionView<ModulePurchaseReques
             .add("status", purchaseRequest.getStatus())
             .add("requester", purchaseRequest.getRequester().getName())
             .add("creation", purchaseRequest.getCreation())
-            .add("product", purchaseRequest.getProduct())
             .add("category", purchaseRequest.getProductType() != null ? purchaseRequest.getProductType().getCategory() : null)
-            .add("productType", purchaseRequest.getProductType().getName())
-            .add("productName", purchaseRequest.getProduct().getName())
+            .add("productType", purchaseRequest.getProductType()!= null ? purchaseRequest.getProductType().getName() : null)
+            .add("productName", purchaseRequest.getProduct()!= null ? purchaseRequest.getProduct().getModel() : null)
             .add("quantity", purchaseRequest.getQuantity())
             .add("description", purchaseRequest.getDescription());
 
@@ -62,23 +61,21 @@ public class PurchaseRequestView extends AbstractActionView<ModulePurchaseReques
 
         windowBuilder.getBodyBuilder()
             .add(new ElementGroup("productInfo").setLabel(LRProduct.PRODUCT).addClass("col")
-                .add(new InputView("product").setLabel(LRProduct.PRODUCT).addClass("col-12"))
                 .add(new InputView("category").setLabel(LRProduct.CATEGORY).addClass("col-2"))
                 .add(new InputView("productType").setLabel(LRProduct.PRODUCT_TYPE).addClass("col-4"))
                 .add(new InputView("productName").setLabel(LRProduct.PRODUCT).addClass("col-4"))
                 .add(new InputView("quantity").setLabel(LRCore.QUANTITY).addClass("col-2").addInputClass("text-right"))
-            )
-            .add(new Textarea("description")
-                .setLabel(LRCore.DESCRIPTION)
-                .addClass("col-12"));
-
-        if (purchaseRequest.getPurchase() != null) {
-            windowBuilder.getFooterBuilder().add(
-                new Button("viewPurchase", LRPurchase.VIEW_PURCHASE)
-                    .addClass("btn-primary")
-                    .addClass("col-2")
-                    .setOnClick(ElementRequest.createModalRequest(StockMovementView.class))
+                .add(new Textarea("description")
+                    .setLabel(LRCore.DESCRIPTION)
+                    .setMinHeight(100)
+                    .addClass("col-12"))
             );
-        }
+
+        windowBuilder.getFooterBuilder().add(
+            new Button("viewPurchase", LRPurchase.VIEW_PURCHASE)
+                .addClass("btn-primary")
+                .addClass("col-2")
+                .setOnClick(ElementRequest.createModalRequest(StockMovementView.class))
+        );
     }
 }
